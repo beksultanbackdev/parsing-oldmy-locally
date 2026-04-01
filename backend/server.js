@@ -13,6 +13,9 @@ const app = express();
 // Enable CORS
 app.use(cors());
 
+// Body parser middleware
+app.use(express.json());
+
 app.get('/', (req, res) => {
   res.send('<h1>SDU Parser Backend</h1>');
 });

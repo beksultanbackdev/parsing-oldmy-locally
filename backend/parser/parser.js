@@ -1,24 +1,12 @@
 import puppeteer from 'puppeteer';
-import dotenv from 'dotenv';
-import path from 'path';
-import connectDB from '../config/db.js';
 import Course from '../models/Course.js';
 import CurriculumCourse from '../models/CurriculumCourse.js';
 import Syllabus from '../models/Syllabus.js';
 
-// Resolve the .env file path relative to the current file
-const envPath = path.resolve(process.cwd(), '../.env');
-dotenv.config({ path: envPath });
-
-// Connect to MongoDB
-connectDB();
-
-async function setAuthCookie(page) {
+async function setAuthCookie(page, cookieValue) {
     console.log('Setting authentication cookie...');
-    const cookieValue = process.env.SDU_COOKIE_PHPSESSID;
-
     if (!cookieValue) {
-        throw new Error('SDU_COOKIE_PHPSESSID is not set in .env file. Please follow the instructions to get it.');
+        throw new Error('PHPSESSID cookie was not provided to the parser.');
     }
 
     const cookie = {
@@ -181,13 +169,13 @@ async function parseSyllabus(browser, url) {
     }
 }
 
-async function parseData() {
+export async function runParser(cookie) {
     console.log('Starting parser...');
     const browser = await puppeteer.launch({ headless: false }); // Set to true for production
     const page = await browser.newPage();
 
     try {
-        await setAuthCookie(page);
+        await setAuthCookie(page, cookie);
 
         console.log('Navigating to course structure page...');
         await page.goto('https://my.sdu.edu.kz/index.php?mod=course_struct', { waitUntil: 'networkidle2' });
@@ -350,4 +338,3 @@ async function parseData() {
     }
 }
 
-parseData();

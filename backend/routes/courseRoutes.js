@@ -1,5 +1,5 @@
 import express from 'express';
-import { getCourses } from '../controllers/courseController.js';
+import { getAllData, getCourses, getCurriculumCourses, getSyllabuses, startParsing } from '../controllers/courseController.js';
 
 const router = express.Router();
 
@@ -7,5 +7,7 @@ const router = express.Router();
 // @route   GET /api/courses
 // @access  Public
 router.get('/', getCourses);
+router.get('/syllabuses', getSyllabuses);
+router.post('/parse', startParsing);
 
 export default router;
