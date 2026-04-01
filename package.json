@@ -3,8 +3,10 @@
     "private": true,
     "type": "module",
     "scripts": {
+        "dev": "vite",
         "build": "vite build",
-        "dev": "vite"
+        "seed": "node backend/parser/seedElectives.js",
+        "build:docker": "pack build sdu-parser-app --builder paketobuildpacks/builder-jammy-base --path ./backend"
     },
     "devDependencies": {
         "@tailwindcss/vite": "^4.0.0",
